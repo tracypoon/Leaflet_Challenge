@@ -24,18 +24,24 @@ function createFeatures(earthquakeData) {
     //Make new function to style the markers
   function getColor(depth) {
     if (depth >5) 
-    {return "#5f0000"} 
+    {return "#80000"} 
     if (depth >4)  
     {return "#ff0000"} 
+    if (depth >3) 
+    {return '#d78700'}
+    if (depth >2) 
+    {return '#00ff00'}
+    if (depth >1) 
+    {return '#ffff00'}
   }
 
 
   //Loop the data through
   var earthquakes = L.geoJSON(earthquakeData, {
     pointToLayer: function (feature, layer) {
-    return L.circleMarker(layer, {radius: 10, fillOpacity: 0.85, color: getColor(feature.geometry.coordinates[2]);
+    return L.circleMarker(layer, {radius: 10, fillOpacity: 0.85, color: getColor(geometry.coordinates[2]))
       },
-    onEachFeature: feature_popup,
+    onEachFeature: feature_popup
   });
 
   // Send our earthquakes layer to the createMap function/
@@ -57,60 +63,6 @@ function createMap(earthquakes) {
       'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
   });
 
-  //Create circle markers
-  // Setting the marker radius for the state by passing population into the markerSize function
-
-  // stateMarkers.push(
-  //   L.circle(locations[i].coordinates, {
-  //     stroke: false,
-  //     fillOpacity: 0.75,
-  //     color: "white",
-  //     fillColor: "white",
-  //     radius: markerSize(locations[i].state.population)
-  //   })
-  // );
-
-  // //Utilize geojson to style the markers
-  // L.geoJson(data, {
-  //   style: function (feature) {
-  //     return {color: feature.properties.color};
-  //   },
-  //   onEachFeature: function (feature, layer) {
-  //     layer.bindPopup(feature.properties.description);
-  //   }
-  // }).addTo(map);
-
-  // //Create legend
-  // var legend = L.control({
-  //   position: "bottomright",
-  // });
-  // legend.onAdd = function (map) {
-  //   var div = L.DomUtil.create("div", "info legend"),
-  //     labels = ["<strong>index</strong>"],
-  //     lower = [0, 0.16, 0.33, 0.44, 0.51],
-  //     upper = [0.15, 0.32, 0.43, 0.5, 0.68];
-
-  //   for (var i = 0; i < lower.length; i++) {
-  //     div.innerHTML += labels.push(
-  //       '<i style="background:' +
-  //         getColorInd(lower[i]) +
-  //         '"></i> ' +
-  //         lower[i] +
-  //         "&ndash;" +
-  //         upper[i]
-  //     );
-  //   }
-  //   div.innerHTML = labels.join("<br>");
-  //   return div;
-  // };
-
-  // legend.addTo(map);
-
-  // var geojson = L.geoJson(Sample, {
-  //   style: styleInd,
-  //   onEachFeature: onEachFeature_LMA,
-  // }).addTo(map);
-
   // Create an overlay object to hold our overlay.
   var overlayMaps = {
     Earthquakes: earthquakes,
@@ -131,4 +83,5 @@ function createMap(earthquakes) {
       collapsed: false,
     })
     .addTo(myMap);
-}
+    )}
+
