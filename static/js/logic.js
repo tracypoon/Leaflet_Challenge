@@ -21,30 +21,47 @@ function createFeatures(earthquakeData) {
 
   // Create a GeoJSON layer that contains the features array on the earthquakeData object.
   // Run the onEachFeature function once for each piece of data in the array.
-    //Make new function to style the markers
+  //Make new function to style the markers
   function getColor(depth) {
-    if (depth >5) 
-    {return "#80000"} 
-    if (depth >4)  
-    {return "#ff0000"} 
-    if (depth >3) 
-    {return '#d78700'}
-    if (depth >2) 
-    {return '#00ff00'}
-    if (depth >1) 
-    {return '#ffff00'}
+    if (depth > 80) {
+      return "#870000";
+    }
+    if (depth > 60) {
+      return "#ff0000";
+    }
+    if (depth > 40) {
+      return ;
+    }
+    if (depth > 20) {
+      return "#00ff00";
+    }
+    if (depth > -50) {
+      return "#ffff00";
+    }"#d78700"
   }
 
+  //Make new function to style marker radius
+  function get_radius(magnitude) {
+  return magnitude * 4
+  }
+
+
+ 
 
   //Loop the data through
   var earthquakes = L.geoJSON(earthquakeData, {
     pointToLayer: function (feature, layer) {
-    return L.circleMarker(layer, {radius: 10, fillOpacity: 0.85, color: getColor(geometry.coordinates[2]))
-      },
-    onEachFeature: feature_popup
+      console.log(feature);
+      return L.circleMarker(layer, {
+        radius: get_radius(feature.properties.mag),
+        fillOpacity: 0.85,
+        color: getColor(feature.geometry.coordinates[2]),
+      });
+    },
+    onEachFeature: feature_popup,
   });
 
-  // Send our earthquakes layer to the createMap function/
+  // Send our earthquakes layer to the createMap function
   createMap(earthquakes);
 }
 
@@ -75,13 +92,24 @@ function createMap(earthquakes) {
     layers: [street, earthquakes],
   });
 
-  // Create a layer control.
-  // Pass it our baseMaps and overlayMaps.
-  // Add the layer control to the map.
-  L.control
-    .layers(baseMaps, overlayMaps, {
-      collapsed: false,
-    })
-    .addTo(myMap);
-    )}
-
+   //Create the legend
+   var legend = L.control({position: 'bottomright'});
+   legend.onAdd = function () {
+ 
+   var div = L.DomUtil.create('div', 'info legend');
+   magnitudes = [0,1,2,3,4,5];
+   colors = ["#ffff00", "#00ff00","#d78700", "#ff0000","#870000" ];
+ 
+   for (var i = 0; i < magnitudes.length; i++) {
+ 
+           div.innerHTML += 
+           labels.push(
+               '<i class="circle" style="background:' + getColor(magnitudes[i]) + '"></i> ' +
+           (magnitudes[i] ? magnitudes[i] : '+'));
+ 
+       }
+       div.innerHTML = labels.join('<br>');
+   return div;
+   };
+   legend.addTo(myMap);
+  }
