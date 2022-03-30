@@ -30,23 +30,20 @@ function createFeatures(earthquakeData) {
       return "#ff0000";
     }
     if (depth > 40) {
-      return ;
+      return;
     }
     if (depth > 20) {
       return "#00ff00";
     }
     if (depth > -50) {
       return "#ffff00";
-    }"#d78700"
+    }
   }
 
   //Make new function to style marker radius
   function get_radius(magnitude) {
-  return magnitude * 4
+    return magnitude * 4;
   }
-
-
- 
 
   //Loop the data through
   var earthquakes = L.geoJSON(earthquakeData, {
@@ -92,24 +89,22 @@ function createMap(earthquakes) {
     layers: [street, earthquakes],
   });
 
-   //Create the legend
-   var legend = L.control({position: 'bottomright'});
-   legend.onAdd = function () {
- 
-   var div = L.DomUtil.create('div', 'info legend');
-   magnitudes = [0,1,2,3,4,5];
-   colors = ["#ffff00", "#00ff00","#d78700", "#ff0000","#870000" ];
- 
-   for (var i = 0; i < magnitudes.length; i++) {
- 
-           div.innerHTML += 
-           labels.push(
-               '<i class="circle" style="background:' + getColor(magnitudes[i]) + '"></i> ' +
-           (magnitudes[i] ? magnitudes[i] : '+'));
- 
-       }
-       div.innerHTML = labels.join('<br>');
-   return div;
-   };
-   legend.addTo(myMap);
-  }
+  /*Legend specific*/
+  var legend = L.control({ position: "bottomright" });
+
+  legend.onAdd = function (myMap) {
+    var div = L.DomUtil.create("div", "legend");
+    div.innerHTML += "<h4>Earthquake Depth</h4>";
+    div.innerHTML +=
+      '<i style="background: #477AC2"></i><span>-50 to 20</span><br>';
+    div.innerHTML +=
+      '<i style="background: #448D40"></i><span>20 to 40</span><br>';
+    div.innerHTML +=
+      '<i style="background: #E6E696"></i><span>40 t0 60</span><br>';
+    div.innerHTML += '<i style="background: #E6E696"></i><span>80+</span><br>';
+
+    return div;
+  };
+
+  legend.addTo(myMap);
+}
