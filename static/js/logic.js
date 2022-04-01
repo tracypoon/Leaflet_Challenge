@@ -10,12 +10,10 @@ d3.json(queryUrl).then(function (data) {
 
 function createFeatures(earthquakeData) {
   // Define a function that we want to run once for each feature in the features array.
-  // Give each feature a popup that describes the place and time of the earthquake.
+  // Give each feature a popup that describes the place, magnitude, and depth of the earthquake.
   function feature_popup(feature, layer) {
     layer.bindPopup(
-      `<h3>${feature.properties.place}</h3><hr><p>${new Date(
-        feature.properties.time
-      )}</p>`
+      `<h3>${feature.properties.place}</h3><hr><p>Magnitude: ${feature.properties.mag}</p><p>Depth: ${feature.geometry.coordinates[2]}</p>`
     );
   }
 
@@ -23,21 +21,22 @@ function createFeatures(earthquakeData) {
   // Run the onEachFeature function once for each piece of data in the array.
   //Make new function to style the markers
   function getColor(depth) {
-    if (depth > 80) {
+    if (depth > 90) {
       return "#870000";
     }
-    if (depth > 60) {
+    if (depth > 70) {
       return "#ff0000";
     }
-    if (depth > 40) {
-      return;
+    if (depth > 50) {
+      return "#d78700";
     }
-    if (depth > 20) {
-      return "#00ff00";
+    if (depth > 30) {
+      return "#d7af00";
     }
-    if (depth > -50) {
+    if (depth > 10) {
       return "#ffff00";
     }
+    return "#00ff00"
   }
 
   //Make new function to style marker radius
@@ -95,14 +94,12 @@ function createMap(earthquakes) {
   legend.onAdd = function (myMap) {
     var div = L.DomUtil.create("div", "legend");
     div.innerHTML += "<h4>Earthquake Depth</h4>";
-    div.innerHTML +=
-      '<i style="background: #477AC2"></i><span>-50 to 20</span><br>';
-    div.innerHTML +=
-      '<i style="background: #448D40"></i><span>20 to 40</span><br>';
-    div.innerHTML +=
-      '<i style="background: #E6E696"></i><span>40 t0 60</span><br>';
-    div.innerHTML += '<i style="background: #E6E696"></i><span>80+</span><br>';
-
+    div.innerHTML += '<i style="background: #00ff00"></i><span>-10 to 10</span><br>';
+    div.innerHTML += '<i style="background: #ffff00"></i><span>10 to 30</span><br>';
+    div.innerHTML += '<i style="background: #d7af00"></i><span>30 t0 50</span><br>';
+    div.innerHTML += '<i style="background: #d78700"></i><span>50 to 70</span><br>';
+    div.innerHTML += '<i style="background: #ff0000"></i><span>70 to 90</span><br>';
+    div.innerHTML += '<i style="background: #870000"></i><span>90+</span><br>';
     return div;
   };
 
